@@ -53,7 +53,8 @@ export var FormsyReactComponent = (ComposedComponent) => {
                 rowClassName:            this.combineContextWithProp('rowClassName'),
                 showErrors:              this.shouldShowErrors(),
                 value:                   this.props.getValue(),
-                onSetValue:              this.props.setValue
+                onSetValue:              this.props.setValue,
+                instance:                this.getInstance,
             };
         }
 
@@ -127,10 +128,20 @@ export var FormsyReactComponent = (ComposedComponent) => {
             delete props.validations;
 
             return (
-                <ComposedComponent
+                <ComposedComponent ref="instance"
                     {...props}
                 />
             );
+        }
+
+        getInstance = () => {
+          var instance = this.refs.instance;
+
+          if (typeof instance.getInstance === "function") {
+            return instance.getInstance();
+          }
+
+          return instance;
         }
     }
 
