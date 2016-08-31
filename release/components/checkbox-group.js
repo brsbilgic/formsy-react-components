@@ -12,7 +12,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _utils = require('./utils');
+var _propTypes = require('./prop-types');
 
 var _errorMessages = require('./error-messages');
 
@@ -38,7 +38,7 @@ var CheckboxGroup = function (_Component) {
     _inherits(CheckboxGroup, _Component);
 
     function CheckboxGroup() {
-        var _Object$getPrototypeO;
+        var _ref;
 
         var _temp, _this, _ret;
 
@@ -48,7 +48,7 @@ var CheckboxGroup = function (_Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(CheckboxGroup)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleChange = function () {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CheckboxGroup.__proto__ || Object.getPrototypeOf(CheckboxGroup)).call.apply(_ref, [this].concat(args))), _this), _this.handleChange = function (event) {
             var _this$props = _this.props;
             var options = _this$props.options;
             var name = _this$props.name;
@@ -59,8 +59,8 @@ var CheckboxGroup = function (_Component) {
             var value = checkedOptions.map(function (option) {
                 return option.value;
             });
-            _this.props.onSetValue(value);
-            _this.props.onChange(name, value);
+            _this.props.onSetValue(value, event.target.value);
+            _this.props.onChange(name, value, event.target.value);
         }, _this.renderElement = function () {
             var controls = _this.props.options.map(function (checkbox, key) {
                 var checked = _this.props.value.indexOf(checkbox.value) !== -1;
@@ -96,6 +96,7 @@ var CheckboxGroup = function (_Component) {
         value: function render() {
 
             var element = this.renderElement();
+
             if (this.props.layout === 'elementOnly') {
                 return _react2.default.createElement(
                     'div',
@@ -119,15 +120,20 @@ var CheckboxGroup = function (_Component) {
     return CheckboxGroup;
 }(_react.Component);
 
-CheckboxGroup.propTypes = _extends({}, _utils.commonProps, {
-    options: _react.PropTypes.array.isRequired,
+CheckboxGroup.propTypes = _extends({}, _propTypes.commonProps, {
+    options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+        disabled: _react.PropTypes.bool,
+        value: _react.PropTypes.string,
+        label: _react.PropTypes.string
+    })),
     value: _react.PropTypes.array
 });
 
-CheckboxGroup.defaultProps = {
+CheckboxGroup.defaultProps = _extends({}, _propTypes.commonDefaults, {
     label: '',
+    options: [],
     value: [],
     help: null
-};
+});
 
 exports.default = CheckboxGroup;

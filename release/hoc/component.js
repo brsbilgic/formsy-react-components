@@ -15,6 +15,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _formsyReact = require('formsy-react');
 
+var _propTypes = require('../components/prop-types');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22,10 +24,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// These are the types of props that we can convert to a HTML 'class' attribute value.
-// See: https://github.com/JedWatson/classnames
-var classNameType = _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.array, _react.PropTypes.object]);
 
 // Component HOC
 // -------------
@@ -43,7 +41,7 @@ var FormsyReactComponent = exports.FormsyReactComponent = function FormsyReactCo
         _inherits(ComponentHOC, _Component);
 
         function ComponentHOC() {
-            var _Object$getPrototypeO;
+            var _ref;
 
             var _temp, _this, _ret;
 
@@ -53,31 +51,27 @@ var FormsyReactComponent = exports.FormsyReactComponent = function FormsyReactCo
                 args[_key] = arguments[_key];
             }
 
-            return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(ComponentHOC)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.getLayout = function () {
-                var defaultProperty = _this.context.layout || 'horizontal';
-                return _this.props.layout ? _this.props.layout : defaultProperty;
-            }, _this.getValidatePristine = function () {
-                var defaultProperty = _this.context.validatePristine || false;
-                return _this.props.validatePristine ? _this.props.validatePristine : defaultProperty;
-            }, _this.getRowClassName = function () {
-                return [_this.context.rowClassName, _this.props.rowClassName];
-            }, _this.getLabelClassName = function () {
-                return [_this.context.labelClassName, _this.props.labelClassName];
-            }, _this.getElementWrapperClassName = function () {
-                return [_this.context.elementWrapperClassName, _this.props.elementWrapperClassName];
+            return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ComponentHOC.__proto__ || Object.getPrototypeOf(ComponentHOC)).call.apply(_ref, [this].concat(args))), _this), _this.mergeLayoutContext = function () {
+                return _this.props.layout || _this.context.layout || 'horizontal';
+            }, _this.mergeValidatePristineContext = function () {
+                if (typeof _this.props.validatePristine === 'boolean') {
+                    return _this.props.validatePristine;
+                }
+                return _this.context.validatePristine || false;
             }, _this.getComponentProps = function () {
                 return {
                     disabled: _this.props.isFormDisabled() || _this.props.disabled,
-                    elementWrapperClassName: _this.getElementWrapperClassName(),
+                    elementWrapperClassName: _this.combineContextWithProp('elementWrapperClassName'),
                     errorMessages: _this.props.getErrorMessages(),
                     id: _this.getId(),
-                    labelClassName: _this.getLabelClassName(),
-                    layout: _this.getLayout(),
+                    labelClassName: _this.combineContextWithProp('labelClassName'),
+                    layout: _this.mergeLayoutContext(),
                     required: _this.props.isRequired(),
-                    rowClassName: _this.getRowClassName(),
+                    rowClassName: _this.combineContextWithProp('rowClassName'),
                     showErrors: _this.shouldShowErrors(),
                     value: _this.props.getValue(),
-                    onSetValue: _this.props.setValue
+                    onSetValue: _this.props.setValue,
+                    instance: _this.getInstance
                 };
             }, _this.getId = function () {
                 var _this$props = _this.props;
@@ -97,39 +91,90 @@ var FormsyReactComponent = exports.FormsyReactComponent = function FormsyReactCo
                 return hash;
             }, _this.shouldShowErrors = function () {
                 if (_this.props.isPristine() === true) {
-                    if (_this.getValidatePristine() === false) {
+                    if (_this.mergeValidatePristineContext() === false) {
                         return false;
                     }
                 }
                 return _this.props.isValid() === false;
+            }, _this.getInstance = function () {
+                var instance = _this.refs.instance;
+
+                if (typeof instance.getInstance === "function") {
+                    return instance.getInstance();
+                }
+
+                return instance;
             }, _temp), _possibleConstructorReturn(_this, _ret);
         }
 
-        // The following methods are used to merge master default properties that
-        // are optionally set on the parent form using the ParentContextMixin.
+        // Use the following value for layout:
+        // 1. layout prop (if supplied)
+        // 2. [else] layout context (if defined)
+        // 3. [else] 'horizontal' (default value)
 
 
-        // getId
-        // -----
-        //
-        // The ID is used as an attribute on the form control, and is used to allow
-        // associating the label element with the form control.
-        //
-        // If we don't explicitly pass an `id` prop, we generate one based on the
-        // `name` and `label` properties.
-
-
-        // Determine whether to show errors, or not.
+        // Use the following value for layout:
+        // 1. validatePristine prop (if supplied)
+        // 2. [else] validatePristine context (if defined)
+        // 3. [else] false (default value)
 
 
         _createClass(ComponentHOC, [{
+            key: 'combineContextWithProp',
+
+
+            // Combine the parent context value with the component prop value.
+            // This is used for CSS classnames, where the value is passed to `JedWatson/classnames`.
+            value: function combineContextWithProp(key) {
+                return [this.context[key], this.props[key]];
+            }
+
+            // getId
+            // -----
+            //
+            // The ID is used as an attribute on the form control, and is used to allow
+            // associating the label element with the form control.
+            //
+            // If we don't explicitly pass an `id` prop, we generate one based on the
+            // `name` and `label` properties.
+
+
+            // Determine whether to show errors, or not.
+
+        }, {
             key: 'render',
 
 
             // We pass through all props, but some are overwritten with `massaged`
             // versions to give our components what they expect.
             value: function render() {
-                return _react2.default.createElement(ComposedComponent, _extends({}, this.props, this.getComponentProps()));
+
+                var props = _extends({}, this.props, this.getComponentProps());
+
+                // Formsy HOC props we don't use.
+                delete props.getErrorMessage;
+                delete props.getErrorMessages;
+                delete props.getValue;
+                delete props.hasValue;
+                delete props.isFormDisabled;
+                delete props.isFormSubmitted;
+                delete props.isPristine;
+                delete props.isRequired;
+                delete props.isValid;
+                delete props.isValidValue;
+                delete props.resetValue;
+                delete props.setValidations;
+                delete props.setValue;
+                delete props.showError;
+                delete props.showRequired;
+
+                // Formsy props we don't use
+                delete props.validationError;
+                delete props.validationErrors;
+                delete props.validations;
+
+                return _react2.default.createElement(ComposedComponent, _extends({ ref: 'instance'
+                }, props));
             }
         }]);
 
@@ -154,16 +199,21 @@ var FormsyReactComponent = exports.FormsyReactComponent = function FormsyReactCo
 
         name: _react.PropTypes.string.isRequired,
         disabled: _react.PropTypes.bool,
-        elementWrapperClassName: classNameType,
+        elementWrapperClassName: _propTypes.styleClassname,
 
         // Not used here, but composed components expect this to be a string.
         help: _react.PropTypes.string,
 
         id: _react.PropTypes.string,
         label: _react.PropTypes.string,
-        labelClassName: classNameType,
+        labelClassName: _propTypes.styleClassname,
         layout: _react.PropTypes.string,
-        rowClassName: classNameType,
+        rowClassName: _propTypes.styleClassname,
+
+        // Whether to show validation errors on pristine (untouched) components.
+        // Note: this doesn't stop the validation from running, it's just a flag
+        // to determine whether the error messages should be shown on components
+        // in their 'pristine' state.
         validatePristine: _react.PropTypes.bool,
 
         // TODO: Not sure having these here this is a good idea.
@@ -177,21 +227,23 @@ var FormsyReactComponent = exports.FormsyReactComponent = function FormsyReactCo
     ComponentHOC.contextTypes = {
         layout: _react.PropTypes.string,
         validatePristine: _react.PropTypes.bool,
-        rowClassName: classNameType,
-        labelClassName: classNameType,
-        elementWrapperClassName: classNameType
+        rowClassName: _propTypes.styleClassname,
+        labelClassName: _propTypes.styleClassname,
+        elementWrapperClassName: _propTypes.styleClassname
     };
 
-    // TODO: Should probably add default props for:
+    // TODO: Should we add default props for the following?:
     // * elementWrapperClassName
     // * labelClassName
     // * rowClassName
-    // * layout
+
+    // The following props get their default values by first looking for props in the parent context.
+    // * layout (See mergeLayoutContext, defaults to 'horizontal')
+    // * validatePristine: (See mergeValidatePristineContext, defaults to 'false'),
     ComponentHOC.defaultProps = {
         disabled: false,
         id: '',
         label: '',
-        validatePristine: false,
         onBlur: function onBlur() {},
         onChange: function onChange() {},
         onFocus: function onFocus() {}

@@ -55,10 +55,12 @@ class Textarea extends Component {
     }
 
     render() {
+        const {help, elementWrapperClassName, errorMessages, labelClassName, rowClassName, showErrors, onSetValue,
+            instance, updateOn, debounce, ...rest} = this.props;
 
         let element = (
             <TextareaControl
-                {...this.props}
+                {...rest}
                 value={this.state.value}
                 onChange={this.handleChange}
                 onBlur={this.handleBlur}

@@ -12,7 +12,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _utils = require('./utils');
+var _propTypes = require('./prop-types');
 
 var _errorMessages = require('./error-messages');
 
@@ -38,7 +38,7 @@ var RadioGroup = function (_Component) {
     _inherits(RadioGroup, _Component);
 
     function RadioGroup() {
-        var _Object$getPrototypeO;
+        var _ref;
 
         var _temp, _this, _ret;
 
@@ -48,7 +48,7 @@ var RadioGroup = function (_Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(RadioGroup)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleChange = function (event) {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = RadioGroup.__proto__ || Object.getPrototypeOf(RadioGroup)).call.apply(_ref, [this].concat(args))), _this), _this.handleChange = function (event) {
             var value = event.currentTarget.value;
             _this.props.onSetValue(value);
             _this.props.onChange(_this.props.name, value);
@@ -125,14 +125,19 @@ var RadioGroup = function (_Component) {
     return RadioGroup;
 }(_react.Component);
 
-RadioGroup.propTypes = _extends({}, _utils.commonProps, {
-    options: _react.PropTypes.array.isRequired,
+RadioGroup.propTypes = _extends({}, _propTypes.commonProps, {
+    options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+        disabled: _react.PropTypes.bool,
+        value: _react.PropTypes.string,
+        label: _react.PropTypes.string
+    })),
     type: _react.PropTypes.oneOf(['inline', 'stacked'])
 });
 
 RadioGroup.defaultProps = {
     type: 'stacked',
     label: '',
+    options: [],
     help: null
 };
 

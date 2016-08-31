@@ -12,7 +12,11 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _utils = require('./utils');
+var _lodash = require('lodash.debounce');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _propTypes = require('./prop-types');
 
 var _errorMessages = require('./error-messages');
 
@@ -26,7 +30,13 @@ var _row = require('./row');
 
 var _row2 = _interopRequireDefault(_row);
 
+var _textarea = require('./controls/textarea');
+
+var _textarea2 = _interopRequireDefault(_textarea);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -37,39 +47,78 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Textarea = function (_Component) {
     _inherits(Textarea, _Component);
 
-    function Textarea() {
-        var _Object$getPrototypeO;
-
-        var _temp, _this, _ret;
-
+    function Textarea(props) {
         _classCallCheck(this, Textarea);
 
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
+        var _this = _possibleConstructorReturn(this, (Textarea.__proto__ || Object.getPrototypeOf(Textarea)).call(this, props));
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Textarea)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleChange = function (event) {
+        _this.componentWillReceiveProps = function (nextProps) {
+            var isValueChanging = nextProps.value !== _this.props.value;
+            if (isValueChanging) {
+                _this.setState({ value: nextProps.value });
+                _this.props.onSetValue(nextProps.value);
+            }
+        };
+
+        _this.shouldUpdateOn = function (eventName) {
+            var updateOnEventNames = _this.props.updateOn.split(' ');
+            return updateOnEventNames.includes(eventName);
+        };
+
+        _this.getDebounceInterval = function (eventName) {
+            if (_this.props.debounce.hasOwnProperty(eventName)) {
+                return _this.props.debounce[eventName];
+            }
+            return 0;
+        };
+
+        _this.handleChange = function (event) {
             var value = event.currentTarget.value;
-            _this.props.onSetValue(value);
+            _this.setState({ value: value });
+            if (_this.shouldUpdateOn('change')) {
+                _this.changeDebounced(value);
+            }
             _this.props.onChange(_this.props.name, value);
-        }, _this.renderElement = function () {
-            return _react2.default.createElement('textarea', _extends({
-                ref: 'element',
-                className: 'form-control'
-            }, _this.props, {
-                id: _this.props.id,
-                value: _this.props.value,
-                onChange: _this.handleChange,
-                disabled: _this.props.disabled
-            }));
-        }, _temp), _possibleConstructorReturn(_this, _ret);
+        };
+
+        _this.handleBlur = function (event) {
+            var value = event.currentTarget.value;
+            _this.setState({ value: value });
+            if (_this.props.shouldUpdateOn('blur')) {
+                _this.changeDebounced.cancel();
+                _this.blurDebounced(value);
+            }
+            _this.props.onBlur(_this.props.name, value);
+        };
+
+        _this.state = { value: props.value };
+        _this.changeDebounced = (0, _lodash2.default)(props.onSetValue, _this.getDebounceInterval('change'));
+        _this.blurDebounced = (0, _lodash2.default)(props.onSetValue, _this.getDebounceInterval('blur'));
+        return _this;
     }
 
     _createClass(Textarea, [{
         key: 'render',
         value: function render() {
+            var _props = this.props;
+            var help = _props.help;
+            var elementWrapperClassName = _props.elementWrapperClassName;
+            var errorMessages = _props.errorMessages;
+            var labelClassName = _props.labelClassName;
+            var rowClassName = _props.rowClassName;
+            var showErrors = _props.showErrors;
+            var onSetValue = _props.onSetValue;
+            var instance = _props.instance;
+            var updateOn = _props.updateOn;
+            var debounce = _props.debounce;
 
-            var element = this.renderElement();
+            var rest = _objectWithoutProperties(_props, ['help', 'elementWrapperClassName', 'errorMessages', 'labelClassName', 'rowClassName', 'showErrors', 'onSetValue', 'instance', 'updateOn', 'debounce']);
+
+            var element = _react2.default.createElement(_textarea2.default, _extends({}, rest, {
+                value: this.state.value,
+                onChange: this.handleChange,
+                onBlur: this.handleBlur
+            }));
 
             if (this.props.layout === 'elementOnly') {
                 return element;
@@ -90,15 +139,24 @@ var Textarea = function (_Component) {
     return Textarea;
 }(_react.Component);
 
-Textarea.propTypes = _extends({}, _utils.commonProps, {
+Textarea.propTypes = _extends({}, _propTypes.commonProps, {
     cols: _react.PropTypes.number,
+    debounce: _react.PropTypes.object,
     rows: _react.PropTypes.number,
-    value: _react.PropTypes.string
+    updateOn: _react.PropTypes.string,
+    value: _react.PropTypes.string,
+    onBlur: _react.PropTypes.func
 });
 
-Textarea.defaultProps = {
+Textarea.defaultProps = _extends({}, _propTypes.commonDefaults, {
     cols: 0, // React doesn't render the cols attribute if it is zero
-    rows: 3
-};
+    rows: 3,
+    updateOn: 'blur change',
+    debounce: {
+        blur: 0,
+        change: 500
+    },
+    onBlur: function onBlur() {}
+});
 
 exports.default = Textarea;

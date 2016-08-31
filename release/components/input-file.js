@@ -12,7 +12,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _utils = require('./utils');
+var _propTypes = require('./prop-types');
 
 var _errorMessages = require('./error-messages');
 
@@ -30,7 +30,13 @@ var _icon = require('./icon');
 
 var _icon2 = _interopRequireDefault(_icon);
 
+var _inputFile = require('./controls/input-file');
+
+var _inputFile2 = _interopRequireDefault(_inputFile);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -41,50 +47,54 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var File = function (_Component) {
     _inherits(File, _Component);
 
-    function File(props) {
+    function File() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
         _classCallCheck(this, File);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(File).call(this, props));
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
 
-        _this.handleChange = function (event) {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = File.__proto__ || Object.getPrototypeOf(File)).call.apply(_ref, [this].concat(args))), _this), _this.handleChange = function (event) {
             var target = event.currentTarget;
             var value = target.value;
-            _this.setState({ fileList: target.files });
             _this.props.onSetValue(target.files);
+
+            // We're passing an additional argument to the onChange handler here,
+            // the 'value' of the field. This value is actually pretty useless,
+            // and we're only including here for completeness.
+            // An example value would be: "C:\fakepath\name-of-file.txt". Note that
+            // if we select multiple files, it only returns a "fakepath" string for
+            // the first file.
+            // A web search for "C:\fakepath\" gives more details.
             _this.props.onChange(_this.props.name, target.files, value);
-        };
-
-        _this.renderElement = function () {
-            return _react2.default.createElement('input', _extends({
-                ref: 'element'
-            }, _this.props, {
-                id: _this.props.id,
-                type: 'file',
-                label: null,
-                onChange: _this.handleChange,
-                disabled: _this.props.disabled
-            }));
-        };
-
-        _this.state = {
-            fileList: []
-        };
-        return _this;
+        }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(File, [{
         key: 'render',
         value: function render() {
+            var _props = this.props;
+            var help = _props.help;
+            var elementWrapperClassName = _props.elementWrapperClassName;
+            var errorMessages = _props.errorMessages;
+            var labelClassName = _props.labelClassName;
+            var rowClassName = _props.rowClassName;
+            var showErrors = _props.showErrors;
+            var onSetValue = _props.onSetValue;
+            var instance = _props.instance;
 
-            var element = this.renderElement();
+            var rest = _objectWithoutProperties(_props, ['help', 'elementWrapperClassName', 'errorMessages', 'labelClassName', 'rowClassName', 'showErrors', 'onSetValue', 'instance']);
+
+            var control = _react2.default.createElement(_inputFile2.default, _extends({}, rest, {
+                onChange: this.handleChange
+            }));
 
             if (this.props.layout === 'elementOnly') {
-                return element;
-            }
-
-            var warningIcon = null;
-            if (this.props.showErrors) {
-                warningIcon = _react2.default.createElement(_icon2.default, { symbol: 'remove', className: 'form-control-feedback' });
+                return control;
             }
 
             return _react2.default.createElement(
@@ -92,8 +102,8 @@ var File = function (_Component) {
                 _extends({}, this.props, {
                     htmlFor: this.props.id
                 }),
-                element,
-                warningIcon,
+                control,
+                this.props.showErrors ? _react2.default.createElement(_icon2.default, { symbol: 'remove', className: 'form-control-feedback' }) : null,
                 this.props.help ? _react2.default.createElement(_help2.default, { help: this.props.help }) : null,
                 this.props.showErrors ? _react2.default.createElement(_errorMessages2.default, { messages: this.props.errorMessages }) : null
             );
@@ -103,6 +113,12 @@ var File = function (_Component) {
     return File;
 }(_react.Component);
 
-File.propTypes = _extends({}, _utils.commonProps);
+File.propTypes = _extends({}, _propTypes.commonProps, {
+    value: _react.PropTypes.object
+});
+
+File.defaultProps = _extends({}, _propTypes.commonDefaults, {
+    value: {}
+});
 
 exports.default = File;

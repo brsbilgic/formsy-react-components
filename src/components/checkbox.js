@@ -13,11 +13,15 @@ class Checkbox extends Component {
     }
 
     renderElement = () => {
+        const {
+            valueLabel, elementWrapperClassName, errorMessages, labelClassName, layout, rowClassName, showErrors,
+            onSetValue, instance, ...rest
+        } = this.props;
         return (
             <div className="checkbox">
                 <label>
                     <input
-                        {...this.props}
+                        {...rest}
                         type="checkbox"
                         label={undefined}
                         checked={this.props.value === true}
@@ -29,7 +33,6 @@ class Checkbox extends Component {
     }
 
     render() {
-
         let element = this.renderElement();
 
         if (this.props.layout === 'elementOnly') {

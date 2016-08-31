@@ -27,9 +27,12 @@ class Select extends Component {
 
     render() {
 
+        const {help, elementWrapperClassName, errorMessages, labelClassName, rowClassName, showErrors, onSetValue,
+            instance, ...rest} = this.props;
+
         let control = (
             <SelectControl
-                {...this.props}
+                {...rest}
                 onChange={this.handleChange}
             />
         )

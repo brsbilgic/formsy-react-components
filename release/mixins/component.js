@@ -117,11 +117,12 @@ var ComponentMixin = {
         if (!this.props.help) {
             return null;
         }
-        return _react2.default.createElement(
+        var helpBlock = _react2.default.createElement(
             'span',
             { className: 'help-block' },
             this.props.help
         );
+        return helpBlock;
     },
 
     // TODO this ought to be called renderErrorMessages.
@@ -131,11 +132,12 @@ var ComponentMixin = {
         }
         var errorMessages = this.getErrorMessages() || [];
         return errorMessages.map(function (message, key) {
-            return _react2.default.createElement(
+            var helpBlock = _react2.default.createElement(
                 'span',
                 { key: key, className: 'help-block validation-message' },
                 message
             );
+            return helpBlock;
         });
     },
 

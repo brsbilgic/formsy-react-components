@@ -24,10 +24,11 @@ class File extends Component {
     }
 
     render() {
-
+        const {help, elementWrapperClassName, errorMessages, labelClassName, rowClassName, showErrors, onSetValue,
+            instance, ...rest} = this.props;
         let control = (
             <FileControl
-                {...this.props}
+                {...rest}
                 onChange={this.handleChange}
             />
         );

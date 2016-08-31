@@ -57,10 +57,14 @@ class Input extends Component {
     }
 
     render = function() {
+        const {layout,
+            elementWrapperClassName, errorMessages, labelClassName, rowClassName, showErrors, onSetValue,
+            instance, updateOn, debounce, addonBefore, addonAfter, buttonBefore, buttonAfter, help, ...rest
+        } = this.props;
 
         let control = (
             <InputControl
-                {...this.props}
+                {...rest}
                 value={this.state.value}
                 onChange={this.handleChange}
                 onBlur={this.handleBlur}
@@ -73,7 +77,7 @@ class Input extends Component {
 
         if (this.props.addonBefore || this.props.addonAfter || this.props.buttonBefore || this.props.buttonAfter) {
             control = (
-                <InputGroup {...this.props}>
+                <InputGroup {...rest}>
                     {control}
                 </InputGroup>
             );

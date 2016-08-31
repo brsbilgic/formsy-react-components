@@ -12,7 +12,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _utils = require('./utils');
+var _propTypes = require('./prop-types');
 
 var _errorMessages = require('./error-messages');
 
@@ -28,6 +28,8 @@ var _row2 = _interopRequireDefault(_row);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -38,7 +40,7 @@ var Checkbox = function (_Component) {
     _inherits(Checkbox, _Component);
 
     function Checkbox() {
-        var _Object$getPrototypeO;
+        var _ref;
 
         var _temp, _this, _ret;
 
@@ -48,28 +50,38 @@ var Checkbox = function (_Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Checkbox)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleChange = function (event) {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Checkbox.__proto__ || Object.getPrototypeOf(Checkbox)).call.apply(_ref, [this].concat(args))), _this), _this.handleChange = function (event) {
             var value = event.currentTarget.checked;
             _this.props.onSetValue(value);
             _this.props.onChange(_this.props.name, value);
         }, _this.renderElement = function () {
+            var _this$props = _this.props;
+            var valueLabel = _this$props.valueLabel;
+            var elementWrapperClassName = _this$props.elementWrapperClassName;
+            var errorMessages = _this$props.errorMessages;
+            var labelClassName = _this$props.labelClassName;
+            var layout = _this$props.layout;
+            var rowClassName = _this$props.rowClassName;
+            var showErrors = _this$props.showErrors;
+            var onSetValue = _this$props.onSetValue;
+            var instance = _this$props.instance;
+
+            var rest = _objectWithoutProperties(_this$props, ['valueLabel', 'elementWrapperClassName', 'errorMessages', 'labelClassName', 'layout', 'rowClassName', 'showErrors', 'onSetValue', 'instance']);
+
             return _react2.default.createElement(
                 'div',
                 { className: 'checkbox' },
                 _react2.default.createElement(
                     'label',
                     null,
-                    _react2.default.createElement('input', _extends({
-                        ref: 'element'
-                    }, _this.props, {
-                        id: _this.id,
+                    _react2.default.createElement('input', _extends({}, rest, {
                         type: 'checkbox',
+                        label: undefined,
                         checked: _this.props.value === true,
-                        onChange: _this.handleChange,
-                        disabled: _this.props.disabled
+                        onChange: _this.handleChange
                     })),
                     ' ',
-                    _this.props.label
+                    _this.props.valueLabel
                 )
             );
         }, _temp), _possibleConstructorReturn(_this, _ret);
@@ -78,7 +90,6 @@ var Checkbox = function (_Component) {
     _createClass(Checkbox, [{
         key: 'render',
         value: function render() {
-
             var element = this.renderElement();
 
             if (this.props.layout === 'elementOnly') {
@@ -88,8 +99,8 @@ var Checkbox = function (_Component) {
             return _react2.default.createElement(
                 _row2.default,
                 _extends({}, this.props, {
-                    label: this.props.rowLabel,
-                    htmlFor: this.id
+                    fakeLabel: true,
+                    htmlFor: this.props.id
                 }),
                 element,
                 this.props.help ? _react2.default.createElement(_help2.default, { help: this.props.help }) : null,
@@ -101,15 +112,41 @@ var Checkbox = function (_Component) {
     return Checkbox;
 }(_react.Component);
 
-Checkbox.propTypes = _extends({}, _utils.commonProps, {
-    rowLabel: _react.PropTypes.string,
-    value: _react.PropTypes.bool
+/*
+ * TODO Document this API change.
+ *
+ * The expected props for this component have been changed for consistency with
+ * the other components.
+ *
+ * Should warn and depricate this on the master branch.
+ *
+ * if rowLabel and label passed:
+ * - show deprication warning.
+ * - behind the scenes:
+ *   - map 'label' to 'valueLabel'
+ *   - map 'rowLabel' to 'label'
+ *
+ * if valueLabel and label passed:
+ * - no warning, new API being used
+ *
+ * Old was:
+ *
+ * Checkbox.propTypes = {
+ *     ...commonProps,
+ *     rowLabel: PropTypes.string,
+ *     value: PropTypes.bool
+ * };
+ */
+
+
+Checkbox.propTypes = _extends({}, _propTypes.commonProps, {
+    value: _react.PropTypes.bool,
+    valueLabel: _react.PropTypes.string
 });
 
-Checkbox.defaultProps = {
-    label: '',
-    rowLabel: '',
-    value: false
-};
+Checkbox.defaultProps = _extends({}, _propTypes.commonDefaults, {
+    value: false,
+    valueLabel: ''
+});
 
 exports.default = Checkbox;

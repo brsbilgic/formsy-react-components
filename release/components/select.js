@@ -12,7 +12,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _utils = require('./utils');
+var _propTypes = require('./prop-types');
 
 var _errorMessages = require('./error-messages');
 
@@ -26,7 +26,13 @@ var _row = require('./row');
 
 var _row2 = _interopRequireDefault(_row);
 
+var _select = require('./controls/select');
+
+var _select2 = _interopRequireDefault(_select);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -38,7 +44,7 @@ var Select = function (_Component) {
     _inherits(Select, _Component);
 
     function Select() {
-        var _Object$getPrototypeO;
+        var _ref;
 
         var _temp, _this, _ret;
 
@@ -48,7 +54,7 @@ var Select = function (_Component) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Select)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleChange = function (event) {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Select.__proto__ || Object.getPrototypeOf(Select)).call.apply(_ref, [this].concat(args))), _this), _this.handleChange = function (event) {
             var target = event.currentTarget;
             var value;
             if (_this.props.multiple) {
@@ -64,38 +70,30 @@ var Select = function (_Component) {
             }
             _this.props.onSetValue(value);
             _this.props.onChange(_this.props.name, value);
-        }, _this.renderElement = function () {
-            var optionNodes = _this.props.options.map(function (item, index) {
-                return _react2.default.createElement(
-                    'option',
-                    _extends({ key: index }, item, { label: null }),
-                    item.label
-                );
-            });
-            return _react2.default.createElement(
-                'select',
-                _extends({
-                    ref: 'element',
-                    className: 'form-control'
-                }, _this.props, {
-                    id: _this.props.id,
-                    value: _this.props.value,
-                    onChange: _this.handleChange,
-                    disabled: _this.props.disabled
-                }),
-                optionNodes
-            );
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(Select, [{
         key: 'render',
         value: function render() {
+            var _props = this.props;
+            var help = _props.help;
+            var elementWrapperClassName = _props.elementWrapperClassName;
+            var errorMessages = _props.errorMessages;
+            var labelClassName = _props.labelClassName;
+            var rowClassName = _props.rowClassName;
+            var showErrors = _props.showErrors;
+            var onSetValue = _props.onSetValue;
+            var instance = _props.instance;
 
-            var element = this.renderElement();
+            var rest = _objectWithoutProperties(_props, ['help', 'elementWrapperClassName', 'errorMessages', 'labelClassName', 'rowClassName', 'showErrors', 'onSetValue', 'instance']);
+
+            var control = _react2.default.createElement(_select2.default, _extends({}, rest, {
+                onChange: this.handleChange
+            }));
 
             if (this.props.layout === 'elementOnly') {
-                return element;
+                return control;
             }
 
             return _react2.default.createElement(
@@ -103,7 +101,7 @@ var Select = function (_Component) {
                 _extends({}, this.props, {
                     htmlFor: this.props.id
                 }),
-                element,
+                control,
                 this.props.help ? _react2.default.createElement(_help2.default, { help: this.props.help }) : null,
                 this.props.showErrors ? _react2.default.createElement(_errorMessages2.default, { messages: this.props.errorMessages }) : null
             );
@@ -113,12 +111,17 @@ var Select = function (_Component) {
     return Select;
 }(_react.Component);
 
-Select.propTypes = _extends({}, _utils.commonProps, {
+Select.propTypes = _extends({}, _propTypes.commonProps, {
+    multiple: _react.PropTypes.bool,
     options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
         value: _react.PropTypes.string,
-        label: _react.PropTypes.string
-    })).isRequired,
-    multiple: _react.PropTypes.bool
+        label: _react.PropTypes.string,
+        group: _react.PropTypes.string
+    }))
 });
+
+Select.defaultProps = {
+    options: []
+};
 
 exports.default = Select;
