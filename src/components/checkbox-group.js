@@ -7,7 +7,8 @@ import Row from './row';
 class CheckboxGroup extends Component {
 
     // Returns an array of the values of all checked items.
-    handleChange = () => {
+    handleChange = (event) => {
+
         let { options, name } = this.props;
         let checkedOptions = options.filter((option, key) => {
             return this.refs['element-' + key].checked;
@@ -15,8 +16,8 @@ class CheckboxGroup extends Component {
         let value = checkedOptions.map(option => {
             return option.value;
         });
-        this.props.onSetValue(value);
-        this.props.onChange(name, value);
+        this.props.onSetValue(value, event.target.value);
+        this.props.onChange(name, value, event.target.value);
     }
 
     renderElement = () => {
