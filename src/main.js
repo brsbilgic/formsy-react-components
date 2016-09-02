@@ -22,7 +22,8 @@ const FRC = {
     Icon:               Icon,
     Row:                Row,
     ComponentMixin:     ComponentMixin,
-    ParentContextMixin: ParentContextMixin
+    ParentContextMixin: ParentContextMixin,
+    FormsyReactComponentHOC: FormsyReactComponent
 };
 
 export default FRC;

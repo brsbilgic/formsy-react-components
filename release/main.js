@@ -63,7 +63,8 @@ var FRC = {
     Icon: _icon2.default,
     Row: _row2.default,
     ComponentMixin: _component2.default,
-    ParentContextMixin: _parentContext2.default
+    ParentContextMixin: _parentContext2.default,
+    FormsyReactComponentHOC: _component3.FormsyReactComponent
 };
 
 exports.default = FRC;
