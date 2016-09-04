@@ -6,9 +6,8 @@ const SelectControl = (props) => {
         return (
             <option key={key} {...item} label={null}>{item.label}</option>
         )
-    }
-
-    let options = props.options;
+    };
+    const {options, layout, ...rest} = props;
 
     let groups = options.filter((item) => {
         return item.group;
@@ -47,10 +46,11 @@ const SelectControl = (props) => {
             optionNodes.push(<optgroup label={group} key={groupIndex}>{groupOptionNodes}</optgroup>);
         });
     }
+
     return (
         <select
             className="form-control"
-            {...props}
+            {...rest}
         >
             {optionNodes}
         </select>

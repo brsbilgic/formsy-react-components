@@ -14,6 +14,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 var SelectControl = function SelectControl(props) {
 
     var renderOption = function renderOption(item, key) {
@@ -23,8 +25,10 @@ var SelectControl = function SelectControl(props) {
             item.label
         );
     };
-
     var options = props.options;
+    var layout = props.layout;
+
+    var rest = _objectWithoutProperties(props, ['options', 'layout']);
 
     var groups = options.filter(function (item) {
         return item.group;
@@ -67,11 +71,12 @@ var SelectControl = function SelectControl(props) {
             ));
         });
     }
+
     return _react2.default.createElement(
         'select',
         _extends({
             className: 'form-control'
-        }, props),
+        }, rest),
         optionNodes
     );
 };
