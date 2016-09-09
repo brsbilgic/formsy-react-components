@@ -4,9 +4,11 @@ import React from 'react';
 // I think we need to keep this as an uncontrolled component, so we override the
 // value.prop.
 const FileControl = (props) => {
+    const {layout, ...rest} = props;
+
     return (
         <input
-            {...props}
+            {...rest}
             type="file"
             label={undefined}
             value={undefined}
