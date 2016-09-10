@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react';
 
 const TextareaControl = (props) => {
+    const {layout, updateOn, ...rest} = props;
     return (
-        <textarea
-            {...props}
-        ></textarea>
+        <textarea {...rest} />
     );
 }
 

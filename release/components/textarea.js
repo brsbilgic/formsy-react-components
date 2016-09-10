@@ -84,7 +84,7 @@ var Textarea = function (_Component) {
         _this.handleBlur = function (event) {
             var value = event.currentTarget.value;
             _this.setState({ value: value });
-            if (_this.props.shouldUpdateOn('blur')) {
+            if (_this.shouldUpdateOn('blur')) {
                 _this.changeDebounced.cancel();
                 _this.blurDebounced(value);
             }
