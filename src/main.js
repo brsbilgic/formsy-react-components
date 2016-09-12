@@ -7,6 +7,8 @@ import RadioGroup from './components/radio-group';
 import Row from './components/row';
 import Select from './components/select';
 import Textarea from './components/textarea';
+import ErrorMessages from './components/error-messages';
+import Help from './components/help';
 import ComponentMixin from './mixins/component';
 import ParentContextMixin from './mixins/parent-context';
 import { FormsyReactComponent } from './hoc/component';
@@ -23,7 +25,9 @@ const FRC = {
     Row:                Row,
     ComponentMixin:     ComponentMixin,
     ParentContextMixin: ParentContextMixin,
-    FormsyReactComponentHOC: FormsyReactComponent
+    FormsyReactComponentHOC: FormsyReactComponent,
+    ErrorMessages:      ErrorMessages,
+    Help:               Help
 };
 
 export default FRC;

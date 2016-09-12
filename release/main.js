@@ -40,6 +40,14 @@ var _textarea = require('./components/textarea');
 
 var _textarea2 = _interopRequireDefault(_textarea);
 
+var _errorMessages = require('./components/error-messages');
+
+var _errorMessages2 = _interopRequireDefault(_errorMessages);
+
+var _help = require('./components/help');
+
+var _help2 = _interopRequireDefault(_help);
+
 var _component = require('./mixins/component');
 
 var _component2 = _interopRequireDefault(_component);
@@ -64,7 +72,9 @@ var FRC = {
     Row: _row2.default,
     ComponentMixin: _component2.default,
     ParentContextMixin: _parentContext2.default,
-    FormsyReactComponentHOC: _component3.FormsyReactComponent
+    FormsyReactComponentHOC: _component3.FormsyReactComponent,
+    ErrorMessages: _errorMessages2.default,
+    Help: _help2.default
 };
 
 exports.default = FRC;
