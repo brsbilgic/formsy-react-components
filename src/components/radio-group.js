@@ -78,7 +78,7 @@ RadioGroup.propTypes = {
         PropTypes.shape({
             disabled: PropTypes.bool,
             value: PropTypes.string,
-            label: PropTypes.string
+            label: PropTypes.node
         })
     ),
     type: PropTypes.oneOf(['inline', 'stacked'])

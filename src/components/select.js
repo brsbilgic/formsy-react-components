@@ -60,7 +60,7 @@ Select.propTypes = {
     options: PropTypes.arrayOf(
         PropTypes.shape({
             value: PropTypes.string,
-            label: PropTypes.string,
+            label: PropTypes.node,
             group: PropTypes.string
         })
     )

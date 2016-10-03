@@ -71,7 +71,7 @@ CheckboxGroup.propTypes = {
         PropTypes.shape({
             disabled: PropTypes.bool,
             value: PropTypes.string,
-            label: PropTypes.string
+            label: PropTypes.node
         })
     ),
     value: PropTypes.array
