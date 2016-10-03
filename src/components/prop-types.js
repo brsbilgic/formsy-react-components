@@ -17,7 +17,7 @@ export const commonProps = {
     disabled: PropTypes.bool,
     errorMessages: PropTypes.array,
     help: PropTypes.string,
-    label: PropTypes.string,
+    label: PropTypes.node,
     layout: PropTypes.oneOf(['horizontal', 'vertical', 'elementOnly']),
     showErrors: PropTypes.bool,
     onChange: PropTypes.func,

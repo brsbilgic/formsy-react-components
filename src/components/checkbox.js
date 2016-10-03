@@ -81,7 +81,7 @@ class Checkbox extends Component {
 Checkbox.propTypes = {
     ...commonProps,
     value: PropTypes.bool,
-    valueLabel: PropTypes.string
+    valueLabel: PropTypes.node
 };
 
 Checkbox.defaultProps = {

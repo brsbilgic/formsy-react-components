@@ -169,7 +169,7 @@ export var FormsyReactComponent = (ComposedComponent) => {
         help: PropTypes.string,
 
         id: PropTypes.string,
-        label: PropTypes.string,
+        label: PropTypes.node,
         labelClassName: styleClassname,
         layout: PropTypes.string,
         rowClassName: styleClassname,
