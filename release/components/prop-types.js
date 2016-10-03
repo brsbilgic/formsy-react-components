@@ -20,7 +20,7 @@ var commonProps = exports.commonProps = {
     disabled: _react.PropTypes.bool,
     errorMessages: _react.PropTypes.array,
     help: _react.PropTypes.string,
-    label: _react.PropTypes.string,
+    label: _react.PropTypes.node,
     layout: _react.PropTypes.oneOf(['horizontal', 'vertical', 'elementOnly']),
     showErrors: _react.PropTypes.bool,
     onChange: _react.PropTypes.func,

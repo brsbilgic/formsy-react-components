@@ -124,7 +124,7 @@ CheckboxGroup.propTypes = _extends({}, _propTypes.commonProps, {
     options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
         disabled: _react.PropTypes.bool,
         value: _react.PropTypes.string,
-        label: _react.PropTypes.string
+        label: _react.PropTypes.node
     })),
     value: _react.PropTypes.array
 });

@@ -115,7 +115,7 @@ Select.propTypes = _extends({}, _propTypes.commonProps, {
     multiple: _react.PropTypes.bool,
     options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
         value: _react.PropTypes.string,
-        label: _react.PropTypes.string,
+        label: _react.PropTypes.node,
         group: _react.PropTypes.string
     }))
 });

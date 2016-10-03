@@ -205,7 +205,7 @@ var FormsyReactComponent = exports.FormsyReactComponent = function FormsyReactCo
         help: _react.PropTypes.string,
 
         id: _react.PropTypes.string,
-        label: _react.PropTypes.string,
+        label: _react.PropTypes.node,
         labelClassName: _propTypes.styleClassname,
         layout: _react.PropTypes.string,
         rowClassName: _propTypes.styleClassname,

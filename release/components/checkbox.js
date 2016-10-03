@@ -141,7 +141,7 @@ var Checkbox = function (_Component) {
 
 Checkbox.propTypes = _extends({}, _propTypes.commonProps, {
     value: _react.PropTypes.bool,
-    valueLabel: _react.PropTypes.string
+    valueLabel: _react.PropTypes.node
 });
 
 Checkbox.defaultProps = _extends({}, _propTypes.commonDefaults, {

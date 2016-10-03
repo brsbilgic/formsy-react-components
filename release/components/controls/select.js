@@ -84,7 +84,7 @@ var SelectControl = function SelectControl(props) {
 SelectControl.propTypes = {
     options: _react.PropTypes.arrayOf(_react.PropTypes.shape({
         value: _react.PropTypes.string,
-        label: _react.PropTypes.string,
+        label: _react.PropTypes.node,
         group: _react.PropTypes.string
     })).isRequired,
     multiple: _react.PropTypes.bool
